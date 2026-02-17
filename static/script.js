@@ -1104,7 +1104,25 @@ function populateLanguageDropdown(selectElement, defaultValue) {
 
 function filterLanguagesByModel(modelName, languageSelect) {
     const currentValue = languageSelect.value;
-    const supportedLanguages = window.modelLanguages[modelName];
+
+    // Map internal model names to API model names
+    const modelMapping = {
+        'general': 'nova-3',
+        'medical': 'nova-3-medical',
+        '2-general': 'nova-2',
+        '2-medical': 'nova-2-medical',
+        '2-meeting': 'nova-2-meeting',
+        '2-phonecall': 'nova-2-phonecall',
+        '2-finance': 'nova-2-finance',
+        '2-conversationalai': 'nova-2-conversationalai',
+        '2-voicemail': 'nova-2-voicemail',
+        '2-video': 'nova-2-video',
+        '2-drivethru': 'nova-2-drivethru',
+        '2-automotive': 'nova-2-automotive'
+    };
+
+    const apiModelName = modelMapping[modelName] || modelName;
+    const supportedLanguages = window.modelLanguages[apiModelName];
 
     languageSelect.innerHTML = '';
 
