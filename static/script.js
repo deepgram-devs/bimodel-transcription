@@ -1070,7 +1070,8 @@ async function loadAvailableModels() {
         model1Select.addEventListener('change', (e) => {
             const selectedOption = e.target.options[e.target.selectedIndex];
             const defaultLang = selectedOption.dataset.defaultLang;
-            filterLanguagesByModel(model1Select.value, language1Select);
+            const isMultilingual = defaultLang === 'multi';
+            filterLanguagesByModel(model1Select.value, language1Select, isMultilingual);
             // Auto-select default language if specified (e.g., 'multi' for Nova-3 Multilingual)
             if (defaultLang) {
                 language1Select.value = defaultLang;
@@ -1080,7 +1081,8 @@ async function loadAvailableModels() {
         model2Select.addEventListener('change', (e) => {
             const selectedOption = e.target.options[e.target.selectedIndex];
             const defaultLang = selectedOption.dataset.defaultLang;
-            filterLanguagesByModel(model2Select.value, language2Select);
+            const isMultilingual = defaultLang === 'multi';
+            filterLanguagesByModel(model2Select.value, language2Select, isMultilingual);
             // Auto-select default language if specified
             if (defaultLang) {
                 language2Select.value = defaultLang;
@@ -1088,8 +1090,12 @@ async function loadAvailableModels() {
         });
 
         // Apply initial filtering for default selected models
-        filterLanguagesByModel(model1Select.value, language1Select);
-        filterLanguagesByModel(model2Select.value, language2Select);
+        const model1Option = model1Select.options[model1Select.selectedIndex];
+        const model2Option = model2Select.options[model2Select.selectedIndex];
+        const isModel1Multilingual = model1Option.dataset.defaultLang === 'multi';
+        const isModel2Multilingual = model2Option.dataset.defaultLang === 'multi';
+        filterLanguagesByModel(model1Select.value, language1Select, isModel1Multilingual);
+        filterLanguagesByModel(model2Select.value, language2Select, isModel2Multilingual);
 
     } catch (error) {
         console.error('Failed to load models:', error);
@@ -1109,39 +1115,42 @@ function populateLanguageDropdown(selectElement, defaultValue) {
     });
 }
 
-function filterLanguagesByModel(modelName, languageSelect) {
+function filterLanguagesByModel(modelName, languageSelect, isMultilingual = false) {
     const currentValue = languageSelect.value;
 
-    // Map internal model names to API model names
+    languageSelect.innerHTML = '';
+
+    // Special case: Nova-3 Multilingual should only show "multi"
+    if (isMultilingual) {
+        const option = document.createElement('option');
+        option.value = 'multi';
+        option.textContent = 'Multilingual';
+        option.selected = true;
+        languageSelect.appendChild(option);
+        return;
+    }
+
+    // Map internal model names to API model names (API uses "2-" prefix for Nova-2)
     const modelMapping = {
-        'general': 'nova-3',
-        'medical': 'nova-3-medical',
-        '2-general': 'nova-2',
-        '2-medical': 'nova-2-medical',
-        '2-meeting': 'nova-2-meeting',
-        '2-phonecall': 'nova-2-phonecall',
-        '2-finance': 'nova-2-finance',
-        '2-conversationalai': 'nova-2-conversationalai',
-        '2-voicemail': 'nova-2-voicemail',
-        '2-video': 'nova-2-video',
-        '2-drivethru': 'nova-2-drivethru',
-        '2-automotive': 'nova-2-automotive'
+        'general': 'general',
+        'medical': 'medical',
+        '2-general': '2-general',
+        '2-medical': '2-medical',
+        '2-meeting': '2-meeting',
+        '2-phonecall': '2-phonecall',
+        '2-finance': '2-finance',
+        '2-conversationalai': '2-conversationalai',
+        '2-voicemail': '2-voicemail',
+        '2-video': '2-video',
+        '2-drivethru': '2-drivethru',
+        '2-automotive': '2-automotive'
     };
 
     const apiModelName = modelMapping[modelName] || modelName;
     const supportedLanguages = window.modelLanguages[apiModelName];
 
-    // Debug logging
-    console.log('Filtering languages for model:', modelName);
-    console.log('API model name:', apiModelName);
-    console.log('Available models:', Object.keys(window.modelLanguages || {}));
-    console.log('Supported languages:', supportedLanguages);
-
-    languageSelect.innerHTML = '';
-
     if (!supportedLanguages || supportedLanguages.size === 0) {
         // If no language data, show all languages
-        console.warn('No language data found for model:', apiModelName, '- showing all languages');
         populateLanguageDropdown(languageSelect, currentValue);
         return;
     }
