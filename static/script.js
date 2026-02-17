@@ -1131,10 +1131,17 @@ function filterLanguagesByModel(modelName, languageSelect) {
     const apiModelName = modelMapping[modelName] || modelName;
     const supportedLanguages = window.modelLanguages[apiModelName];
 
+    // Debug logging
+    console.log('Filtering languages for model:', modelName);
+    console.log('API model name:', apiModelName);
+    console.log('Available models:', Object.keys(window.modelLanguages || {}));
+    console.log('Supported languages:', supportedLanguages);
+
     languageSelect.innerHTML = '';
 
     if (!supportedLanguages || supportedLanguages.size === 0) {
         // If no language data, show all languages
+        console.warn('No language data found for model:', apiModelName, '- showing all languages');
         populateLanguageDropdown(languageSelect, currentValue);
         return;
     }
