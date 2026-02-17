@@ -1003,7 +1003,11 @@ async function loadAvailableModels() {
         language2Select.innerHTML = '';
 
         // Extract and sort languages
-        const languageEntries = Object.entries(data.languages || {});
+        // Filter to only non-localized language codes (en, es, fr, not en-us, es-latam, etc.)
+        const languageEntries = Object.entries(data.languages || {}).filter(([code]) => {
+            // Keep only codes without dialect/region suffixes (no hyphens)
+            return !code.includes('-');
+        });
 
         // Add 'multi' for multilingual support (not in API response)
         languageEntries.push(['multi', 'Multilingual']);
