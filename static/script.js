@@ -979,6 +979,7 @@ async function loadAvailableModels() {
         availableModels = data;
 
         // Build model-to-languages mapping from API data
+        // Normalize localized codes to base codes (en-us -> en, es-latam -> es)
         const modelLanguages = {};
         if (data.stt) {
             data.stt.forEach(model => {
@@ -986,9 +987,11 @@ async function loadAvailableModels() {
                     if (!modelLanguages[model.name]) {
                         modelLanguages[model.name] = new Set();
                     }
-                    // Add all supported languages for this model
+                    // Add all supported languages for this model, normalized to base codes
                     model.languages.forEach(lang => {
-                        modelLanguages[model.name].add(lang);
+                        // Extract base language code (en-us -> en, es-latam -> es)
+                        const baseLang = lang.split('-')[0];
+                        modelLanguages[model.name].add(baseLang);
                     });
                 }
             });
