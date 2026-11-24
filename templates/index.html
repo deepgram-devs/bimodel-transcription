@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bimodel Transcription Demo | Deepgram</title>
+    <title>Bimodel transcription demo | Deepgram</title>
+    <link rel="icon" href="{{ url_for('static', filename='vdui/logos/deepgram-favicon.svg') }}" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Deepgram brand UI kit (static/vdui): tokens, fonts, and utilities. style.css builds on it. -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='vdui/brand.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="dg-constrain-width">
+    <div class="topbar">
+        <div class="topbar__inner">
+            <a href="https://deepgram.com" target="_blank" rel="noopener noreferrer">
+                <img class="topbar__logo" src="{{ url_for('static', filename='vdui/logos/deepgram.svg') }}" alt="Deepgram">
+            </a>
+            <span class="topbar__tag label">Demo</span>
+        </div>
+    </div>
+
+    <main class="dg-constrain-width">
         <!-- Header -->
         <header class="header">
-            <div class="header__logo">
-                <i class="fas fa-waveform-lines" style="color: var(--dg-primary); font-size: 2rem;"></i>
-                <h1 class="dg-page-heading">Bimodel Transcription Demo</h1>
-            </div>
-            <p class="dg-prose" style="margin-top: 1rem; color: var(--color-text-muted);">
-                Dual-model transcription using two Deepgram models with confidence-based merging
+            <p class="header__kicker label">Speech-to-text</p>
+            <h1 class="dg-page-heading">Bimodel transcription</h1>
+            <p class="header__intro">
+                Dual-model transcription using two Deepgram models with confidence-based merging.
             </p>
         </header>
 
@@ -24,7 +34,7 @@
         <section class="dg-section" id="upload-section">
             <div class="dg-card">
                 <div class="dg-card__header">
-                    <h2 class="dg-card-heading">Upload Audio File</h2>
+                    <h2 class="dg-card-heading">Upload audio file</h2>
                 </div>
                 <div class="dg-card__body">
                     <form id="upload-form">
@@ -32,41 +42,37 @@
                         <div class="model-config">
                             <div class="model-config-row">
                                 <div class="model-config-item">
-                                    <label class="model-config-label">
-                                        <i class="fas fa-language"></i>
+                                    <label class="model-config-label label" for="language1-select">
                                         Language 1
                                     </label>
                                     <select id="language1-select" class="dg-select">
-                                        <option value="">Loading...</option>
+                                        <option value="">Loading…</option>
                                     </select>
                                 </div>
                                 <div class="model-config-item">
-                                    <label class="model-config-label">
-                                        <i class="fas fa-microchip"></i>
+                                    <label class="model-config-label label" for="model1-select">
                                         Model 1
                                     </label>
                                     <select id="model1-select" class="dg-select">
-                                        <option value="">Loading...</option>
+                                        <option value="">Loading…</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="model-config-row">
                                 <div class="model-config-item">
-                                    <label class="model-config-label">
-                                        <i class="fas fa-language"></i>
+                                    <label class="model-config-label label" for="language2-select">
                                         Language 2
                                     </label>
                                     <select id="language2-select" class="dg-select">
-                                        <option value="">Loading...</option>
+                                        <option value="">Loading…</option>
                                     </select>
                                 </div>
                                 <div class="model-config-item">
-                                    <label class="model-config-label">
-                                        <i class="fas fa-microchip"></i>
+                                    <label class="model-config-label label" for="model2-select">
                                         Model 2
                                     </label>
                                     <select id="model2-select" class="dg-select">
-                                        <option value="">Loading...</option>
+                                        <option value="">Loading…</option>
                                     </select>
                                 </div>
                             </div>
@@ -82,7 +88,7 @@
                             />
                             <i class="fas fa-cloud-upload-alt dg-drag-drop-zone__icon"></i>
                             <p class="dg-drag-drop-zone__text">Drop audio file here or click to browse</p>
-                            <p class="dg-drag-drop-zone__hint">Supports WAV, MP3, M4A, FLAC, OGG (up to 2GB)</p>
+                            <p class="dg-drag-drop-zone__hint">Supports WAV, MP3, M4A, FLAC, and OGG, up to 2 GB</p>
                         </div>
 
                         <!-- File Selected Info -->
@@ -102,8 +108,7 @@
 
                         <div class="button-group" style="margin-top: 1.5rem;">
                             <button type="submit" class="dg-btn dg-btn--primary" id="upload-btn" disabled>
-                                <i class="fas fa-play"></i>
-                                Start Transcription
+                                Start transcription
                             </button>
                         </div>
                     </form>
@@ -116,8 +121,8 @@
             <div class="dg-card">
                 <div class="dg-card__body" style="text-align: center; padding: 3rem;">
                     <div class="dg-spinner" style="margin: 0 auto 1.5rem;"></div>
-                    <h3 class="dg-item-title">Processing Audio...</h3>
-                    <p class="dg-prose" id="progress-text" style="margin-top: 1rem;">Uploading file...</p>
+                    <h3 class="dg-item-title">Processing audio…</h3>
+                    <p class="dg-prose" id="progress-text" style="margin-top: 0.5rem;">Uploading file…</p>
                     <div class="progress-bar" style="margin-top: 1.5rem;">
                         <div class="progress-bar__fill" id="progress-fill"></div>
                     </div>
@@ -139,7 +144,7 @@
         <section class="dg-section" id="results-section" style="display: none;">
             <div class="dg-card">
                 <div class="dg-card__header">
-                    <h2 class="dg-card-heading">Transcription Results</h2>
+                    <h2 class="dg-card-heading">Transcription results</h2>
                     <div class="metadata-badges" id="metadata"></div>
                 </div>
                 <div class="dg-card__body">
@@ -174,7 +179,7 @@
                             <div class="timeline-row__label">
                                 <i class="fas fa-wand-magic-sparkles"></i>
                                 Merged
-                                <span class="model-badge">Confidence-Based</span>
+                                <span class="model-badge">Confidence-based</span>
                             </div>
                             <div class="timeline-row__content" id="merged-timeline">
                                 <!-- Words with substitution highlighting -->
@@ -184,7 +189,7 @@
                         <!-- Timeline Scrubber -->
                         <div class="timeline-scrubber">
                             <div class="timeline-controls">
-                                <button class="dg-btn dg-btn--ghost dg-btn--sm dg-btn--icon-only" id="play-pause-btn">
+                                <button class="dg-btn dg-btn--ghost dg-btn--sm dg-btn--icon-only" id="play-pause-btn" aria-label="Play or pause">
                                     <i class="fas fa-play"></i>
                                 </button>
                                 <span class="timeline-time" id="current-time">0:00</span>
@@ -198,15 +203,15 @@
                             </div>
                             <div class="timeline-legend">
                                 <span class="timeline-legend-item">
-                                    <span class="timeline-legend-color" style="background-color: #13ef95;"></span>
+                                    <span class="timeline-legend-color legend--model1"></span>
                                     Model 1 selected
                                 </span>
                                 <span class="timeline-legend-item">
-                                    <span class="timeline-legend-color" style="background-color: #149afb;"></span>
+                                    <span class="timeline-legend-color legend--model2"></span>
                                     Model 2 (confidence)
                                 </span>
                                 <span class="timeline-legend-item">
-                                    <span class="timeline-legend-color" style="background-color: #fec84b;"></span>
+                                    <span class="timeline-legend-color legend--gap"></span>
                                     Model 2 (gap-filling)
                                 </span>
                             </div>
@@ -214,34 +219,36 @@
                     </div>
 
                     <!-- Download Options -->
-                    <div class="dg-card__footer" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border-default);">
+                    <div class="dg-card__footer" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--color-line);">
                         <button class="dg-btn dg-btn--secondary" id="download-json-btn">
                             <i class="fas fa-download"></i>
                             Download JSON
                         </button>
                         <button class="dg-btn dg-btn--secondary" id="download-txt-btn">
-                            <i class="fas fa-file-text"></i>
+                            <i class="fas fa-file-lines"></i>
                             Download TXT
                         </button>
                         <button class="dg-btn dg-btn--ghost" id="new-upload-btn">
                             <i class="fas fa-arrow-left"></i>
-                            New Upload
+                            New upload
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Footer -->
-        <footer class="footer">
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
             <div class="footer__content">
                 <p class="footer__text">
-                    Built with <i class="fas fa-heart" style="color: var(--dg-primary);"></i> using Deepgram
+                    Built with <img src="{{ url_for('static', filename='vdui/logos/deepgram.svg') }}" alt="Deepgram">
                 </p>
                 <div class="footer__links">
                     <a href="https://developers.deepgram.com" target="_blank" rel="noopener noreferrer" class="footer__link">
                         <i class="fas fa-book"></i>
-                        Developer Docs
+                        Developer docs
                     </a>
                     <a href="https://github.com/deepgram-devs/bimodel-transcription" target="_blank" rel="noopener noreferrer" class="footer__link">
                         <i class="fab fa-github"></i>
@@ -249,8 +256,7 @@
                     </a>
                 </div>
             </div>
-        </footer>
-    </div>
+    </footer>
 
     <!-- Hidden audio element for playback -->
     <audio id="audio-player" preload="auto" style="display: none;"></audio>
