@@ -344,8 +344,8 @@ function renderTimelineWords(words, source) {
                 Math.abs(mw.start - word.start) < overlapThreshold && mw.source === 'model1'
             );
             if (inMerge) {
-                backgroundColor = 'rgba(19, 239, 149, 0.2)'; // Green
-                borderColor = '#13ef95';
+                backgroundColor = 'color-mix(in srgb, var(--color-lime) 25%, transparent)'; // Green
+                borderColor = 'var(--color-lime)';
             }
         } else if (source === 'model2') {
             // Model 2 words - check if selected and why
@@ -362,12 +362,12 @@ function renderTimelineWords(words, source) {
 
                 if (hasModel1) {
                     // Confidence-based selection
-                    backgroundColor = 'rgba(20, 154, 251, 0.2)'; // Blue
-                    borderColor = '#149afb';
+                    backgroundColor = 'color-mix(in srgb, var(--color-ring-blue) 20%, transparent)'; // Blue
+                    borderColor = 'var(--color-ring-blue)';
                 } else {
                     // Gap-filling
-                    backgroundColor = 'rgba(254, 200, 75, 0.2)'; // Orange
-                    borderColor = '#fec84b';
+                    backgroundColor = 'color-mix(in srgb, var(--color-orange) 20%, transparent)'; // Orange
+                    borderColor = 'var(--color-orange)';
                 }
             }
         }
@@ -422,8 +422,8 @@ function renderMergedTimelineWords(words) {
 
         if (word.source === 'model1') {
             // Model 1 selected
-            backgroundColor = 'rgba(19, 239, 149, 0.2)'; // Green
-            borderColor = '#13ef95';
+            backgroundColor = 'color-mix(in srgb, var(--color-lime) 25%, transparent)'; // Green
+            borderColor = 'var(--color-lime)';
         } else if (word.source === 'model2') {
             // Model 2 selected - determine if by confidence or gap-filling
             const hasModel1 = model1Words.some(w =>
@@ -432,12 +432,12 @@ function renderMergedTimelineWords(words) {
 
             if (hasModel1) {
                 // Confidence-based selection (both models transcribed)
-                backgroundColor = 'rgba(20, 154, 251, 0.2)'; // Blue
-                borderColor = '#149afb';
+                backgroundColor = 'color-mix(in srgb, var(--color-ring-blue) 20%, transparent)'; // Blue
+                borderColor = 'var(--color-ring-blue)';
             } else {
                 // Gap-filling (only model2 transcribed)
-                backgroundColor = 'rgba(254, 200, 75, 0.2)'; // Yellow
-                borderColor = '#fec84b';
+                backgroundColor = 'color-mix(in srgb, var(--color-orange) 20%, transparent)'; // Yellow
+                borderColor = 'var(--color-orange)';
             }
         }
 
@@ -566,19 +566,19 @@ function analyzeTranscriptSegments() {
         if (hasModel1 && hasModel2) {
             // Both models transcribed - confidence-based selection
             if (mergedWord.source === 'model2') {
-                color = '#149afb'; // Blue - Model 2 chosen by confidence
+                color = 'var(--color-ring-blue)'; // Blue - Model 2 chosen by confidence
                 label = 'Model 2 selected (higher confidence)';
             } else {
-                color = '#13ef95'; // Green - Model 1 chosen by confidence
+                color = 'var(--color-lime)'; // Green - Model 1 chosen by confidence
                 label = 'Model 1 selected (higher confidence)';
             }
         } else if (hasModel1 && !hasModel2) {
             // Gap-filling: Only Model 1 transcribed
-            color = '#13ef95'; // Green - Model 1 filled gap
+            color = 'var(--color-lime)'; // Green - Model 1 filled gap
             label = 'Model 1 only (gap-filling)';
         } else if (hasModel2 && !hasModel1) {
             // Gap-filling: Only Model 2 transcribed
-            color = '#fec84b'; // Orange - Model 2 filled gap
+            color = 'var(--color-orange)'; // Orange - Model 2 filled gap
             label = 'Model 2 only (gap-filling)';
         }
 
@@ -793,14 +793,14 @@ function displayMetadata(metadata) {
         badges.push(`
             <div class="badge badge--success">
                 <i class="fas fa-check-circle"></i>
-                ${lang2Display} Detected
+                ${lang2Display} detected
             </div>
         `);
     } else {
         badges.push(`
             <div class="badge">
                 <i class="fas fa-info-circle"></i>
-                ${metadata.language1_display || 'Model 1'} Only
+                ${metadata.language1_display || 'Model 1'} only
             </div>
         `);
     }
